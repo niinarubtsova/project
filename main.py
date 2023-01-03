@@ -44,8 +44,8 @@ class Order(db.Model):
     end_date = db.Column(db.String())
     address = db.Column(db.String(255))
     price = db.Column(db.Integer)
-    customer_id = db.Column(db.Integer, db.ForeignKey("usere.id"))
-    executor_id = db.Column(db.Integer, db.ForeignKey("usere.id"))
+    customer_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    executor_id = db.Column(db.Integer, db.ForeignKey("user.id"))
 
     def to_dict(self):
         return {
@@ -104,7 +104,7 @@ def user():
         return "User created", 201
 
 @app.route("/user/<int:uid>", methods=["GET", "PUT", "DELETE"])
-def user(uid: int):
+def users(uid: int):
 
     if request.method == "GET":
         return json.dumps(User.query.get(uid).to_dict()), 200
@@ -164,7 +164,7 @@ def order():
         return "Order Created", 201
 
 @app.route("/order/<int:uid>", methods=["GET", "PUT", "DELETE"])
-def order(uid: int):
+def orders(uid: int):
     if request.method == "GET":
         return json.dumps(Order.query.get(uid).to_dict()), 200
 
@@ -219,7 +219,7 @@ def offer():
         return "Offer Created", 201
 
 @app.route("/offer/<int:uid>", methods=["GET", "PUT", "DELETE"])
-def offer(uid: int):
+def offers(uid: int):
     if request.method == "GET":
         return json.dumps(Offer.query.get(uid).to_dict()), 200
 
@@ -246,7 +246,7 @@ def offer(uid: int):
 #---------------------------------Init DB----------------------------------
 
 def init_database():
-    db.drop.all()
+    db.drop_all()
     db.create_all()
 
     for user_data in raw_data.users:
@@ -292,5 +292,6 @@ def init_database():
 
 
 if __name__ == '__main__':
-    init_database()
-    app.run(debug=True)
+    with app.app_context():
+        init_database()
+        app.run(debug=True)
