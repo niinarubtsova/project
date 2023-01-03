@@ -77,7 +77,7 @@ class Offer(db.Model):
 
 #--------------------------------Users Views--------------------------------------
 
-@app.route("/users", methods=["GET", "POST"])
+@app.route("/user", methods=["GET", "POST"])
 def user():
     if request.method == "GET":
         result = []
